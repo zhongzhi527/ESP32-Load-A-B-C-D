@@ -70,7 +70,7 @@ volatile float pendingValue = 0.0f;
 bool lastButtonReading = HIGH;
 bool stableButtonState = HIGH;
 unsigned long buttonChangedMs = 0;
-unsigned long buttonPressStartMs = 0;
+
 
 float lastOledWeight = NAN;
 uint8_t lastOledStatus = 255;
@@ -406,9 +406,9 @@ void handlePhysicalButton() {
   }
   if (now - buttonChangedMs < BUTTON_DEBOUNCE_MS || reading == stableButtonState) return;
   stableButtonState = reading;
-  if (stableButtonState == LOW) {
-    buttonPressStartMs = now;
-  } else {
+  // Act on release only: a press clears any held lock and resumes measuring.
+  // (There is no long-press action, so the press edge needs no handling.)
+  if (stableButtonState == HIGH) {
     clearLock();
     finishCommand(COMMAND_CLEAR_LOCK, COMMAND_RESULT_OK);
     showMessage("Continue", "Measuring");
