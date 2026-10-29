@@ -72,3 +72,10 @@ configured with.
 3. **Build**, then **Upload** to the matching ESP32.
 4. Open the **Serial Monitor** at `115200` baud to read the node's MAC and live
    weight.
+
+### Platform version is pinned on purpose
+
+`platformio.ini` pins `platform = espressif32@6.5.0` (Arduino-ESP32 2.0.x).
+Leaving it unpinned pulls the newest platform, whose toolchain can fail to
+build. If a build fails right after a clean checkout, confirm the pin is
+present and delete the `.pio` folder before rebuilding.
